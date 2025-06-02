@@ -16,6 +16,8 @@ pipeline {
     environment {
         REGISTRY_URL = 'registry-image:5000'
         IMAGE_NAME = 'first-app'
+        SONAR_HOST_URL = 'http://sonarqube-ce-image:9000'
+        SONAR_TOKEN = credentials('sonar-token')
     }
 
     stages {
@@ -27,9 +29,28 @@ pipeline {
 
         stage('Build & Test') {
             steps {
-                sh "docker build -t ${IMAGE_NAME}:${params.VERSION} -f Dockerfile ."
+                sh """
+                    docker build -t ${IMAGE_NAME}:${params.VERSION} -f Dockerfile .
+                    docker create --name tmp-container ${IMAGE_NAME}:${params.VERSION}
+                    docker cp tmp-container:/app/coverage.out coverage.out
+                    docker rm tmp-container
+                """
             }
         }
+
+        stage('Code Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh '''
+                        sonar-scanner 
+                        -Dsonar.projectKey=first-app \
+                        -Dsonar.sources=. \
+                        -Dsonar.go.coverage.reportPaths=coverage.out
+                    '''
+                }
+            }
+        }
+
 
         stage('Tag Image') {
             steps {
