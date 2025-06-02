@@ -27,7 +27,7 @@ pipeline {
 
         stage('Build & Test') {
             steps {
-                sh "docker build -t ${IMAGE_NAME}:${params.VERSION} -f app/Dockerfile ."
+                sh "docker build -t ${IMAGE_NAME}:${params.VERSION} -f Dockerfile ."
             }
         }
 
