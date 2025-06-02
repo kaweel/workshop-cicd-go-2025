@@ -41,14 +41,14 @@ pipeline {
 
         stage('Code Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh '''
-                        sonar-scanner 
-                        -Dsonar.projectKey=first-app \
-                        -Dsonar.sources=. \
-                        -Dsonar.go.coverage.reportPaths=coverage.out
-                    '''
-                }
+                sh """
+                    sonar-scanner \
+                    -Dsonar.projectKey=${IMAGE_NAME} \
+                    -Dsonar.sources=. \
+                    -Dsonar.go.coverage.reportPaths=coverage.out \
+                    -Dsonar.host.url=${SONAR_HOST_URL} \
+                    -Dsonar.login=${SONAR_TOKEN}
+                """
             }
         }
 
