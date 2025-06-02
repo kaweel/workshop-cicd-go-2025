@@ -1,10 +1,6 @@
 pipeline {
     agent { label 'docker-agent' }
 
-    tools {
-        sonarQubeScanner 'sonar-scanner-cli'
-    }
-
     parameters {
         string(
             name: 'VERSION', 
