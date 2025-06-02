@@ -34,7 +34,7 @@ pipeline {
                     docker rm -f tmp-container || true
                     docker build -t ${IMAGE_NAME}:${params.VERSION} -f Dockerfile .
                     docker create --name tmp-container ${IMAGE_NAME}:${params.VERSION}
-                    docker cp tmp-container:/app/coverage.out coverage.out
+                    docker cp tmp-container:/coverage.out coverage.out
                 """
             }
         }
