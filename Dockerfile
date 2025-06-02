@@ -6,6 +6,8 @@ RUN go mod download
 RUN go test -v ./... -coverprofile=coverage.out
 RUN CGO_ENABLED=0 GOOS=linux go build -v -o main .
 
+# Stage 2: Pack
 FROM alpine:latest AS final
+COPY --from=builder /app/coverage.out .
 COPY --from=builder /app/main /main
 ENTRYPOINT ["./main"]
