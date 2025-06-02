@@ -14,7 +14,7 @@ pipeline {
     }
 
     environment {
-        REGISTRT_URL = 'registry-image:5000'
+        REGISTRY_URL = 'localhost:5000'
         IMAGE_NAME = 'first-app'
     }
 
@@ -33,13 +33,13 @@ pipeline {
 
         stage('Tag Image') {
             steps {
-                sh "docker tag ${IMAGE_NAME}:${params.VERSION} ${REGISTRT_URL}/${IMAGE_NAME}:${tag}"
+                sh "docker tag ${IMAGE_NAME}:${params.VERSION} ${REGISTRY_URL}/${IMAGE_NAME}:${params.VERSION}"
             }
         }
 
         stage('Upload Image') {
             steps {
-                sh "docker push ${REGISTRT_URL}/${IMAGE_NAME}:${tag}"
+                sh "docker push ${REGISTRY_URL}/${IMAGE_NAME}:${params.VERSION}"
             }
         }
 
