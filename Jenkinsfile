@@ -14,7 +14,7 @@ pipeline {
     }
 
     environment {
-        REGISTRY_URL = 'localhost:5000'
+        REGISTRY_URL = 'registry-image:5000'
         IMAGE_NAME = 'first-app'
     }
 
